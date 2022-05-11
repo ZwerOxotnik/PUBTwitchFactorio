@@ -12,4 +12,4 @@ port = 25575 #rcon port of your factorio server (default is 25575)
 password = "" #rcon password of your factorio server
 
 [Factorio]
-twitch_messages = true #Works only with https://mods.factorio.com/mod/useful_book
+twitch_messages = true
