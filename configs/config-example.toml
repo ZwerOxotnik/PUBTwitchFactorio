@@ -1,0 +1,15 @@
+debug = false #Enable or disable debug mode with log messages in console
+
+[Twitch]
+channel = "Your channel" #twitch channel that the bot should connect to i.e. your channel name
+bot_id = "" #Your registered application's Client ID to allow API calls by the bot
+token = "" #(Optional here) Bot's OAuth Token
+prefix = "?" #Prefix for commands
+
+[rcon]
+host = "127.0.0.1" #ip of your factorio server
+port = 25575 #rcon port of your factorio server (default is 25575)
+password = "" #rcon password of your factorio server
+
+[Factorio]
+twitch_messages = true #Works only with https://mods.factorio.com/mod/useful_book

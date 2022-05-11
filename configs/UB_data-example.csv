@@ -1,0 +1,4 @@
+type,count_args,script_name,twitch_command,twitch_description
+message,,my script 1,script1,accepts any message
+arguments,1,my script 2,script2,accepts 1 argument
+arguments,2,my script 3,script3,accepts 2 arguments

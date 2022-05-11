@@ -1,0 +1,10 @@
+{
+  "python.linting.ignorePatterns": ["configs", ".vscode"],
+  "python.linting.pycodestyleArgs": ["--ignore=E501"],
+  "python.linting.pylintArgs": ["--disable=C0114,C0115,C0116,C0301"],
+  "python.linting.pycodestyleEnabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.flake8Enabled": false,
+  "python.linting.enabled": true,
+  "python.formatting.provider": "black",
+}
