@@ -8,8 +8,31 @@ import webbrowser
 import csv
 import getpass
 import tomli  # import tomllib in Python 3.11
+import psutil
 import readchar
 from Bot import Bot
+
+
+def lock(filename: str):
+    # Prevents multiple instances
+    pidfile = open(filename, mode="w+", encoding="UTF-8")
+    if os.path.exists(filename):
+        prev_pid = None
+        pid = os.getpid()
+        try:
+            prev_pid = int(pidfile.readline())
+            if prev_pid == pid and psutil.pid_exists(prev_pid):
+                pidfile.close()
+                sys.exit(0)
+        except ValueError:
+            pass
+        pidfile.write(str(pid))
+    else:
+        pidfile.write(str(os.getpid()))
+    pidfile.close()
+
+
+lock("PUBTF_bot.lock")
 
 twitch_config = {"prefix": "?", "channel": ""}
 rcon_config = {"port": 25575}
@@ -67,24 +90,33 @@ if not twitch_config.get("token"):
 
 bot = Bot(twitch_config, rcon_config, debug)
 
-useful_book_version = bot.check_mod("useful_book")
+bot.check_mod("useful_book")
+bot.check_mod("AARR")
+AARR_source = bot.get_AARR_source()
 if factorio_config["twitch_messages"]:
-    if useful_book_version:
+    prefix = None
+    if bot.mods.get("useful_book"):
+        prefix = '__useful_book__ RunRCONScript("Print Twitch message",'
+    elif AARR_source and AARR_source == "AARR":
+        prefix = '__AARR__ printTwitchMessage('
+    elif AARR_source and AARR_source == "level":
+        prefix = 'printTwitchMessage('
+    if prefix:
         @bot.event()
         async def event_message(ctx):
             # 'Runs every time a message is sent in chat.'
             if ctx.author is None:
                 return
-            bot.rcon.command(f'/sc __useful_book__ RunRCONScript("Print Twitch message","{ctx.author.name}","{ctx.content}")')
+            bot.rcon.send_command(f'/sc {prefix}"{ctx.author.name}","{ctx.content}")')
     else:
         @bot.event()
         async def event_message(ctx):
             # 'Runs every time a message is sent in chat.'
             if ctx.author is None:
                 return
-            bot.rcon.command(f'/sc game.print({"", "[color=purple][Twitch][/color] ", {ctx.author.name}, {"colon"}, " ", {ctx.content}})')
+            bot.rcon.send_command(f'/sc game.print({"", "[color=purple][Twitch][/color] ", {ctx.author.name}, {"colon"}, " ", {ctx.content}})')
 
-if useful_book_version:
+if bot.mods.get("useful_book"):
     with open('configs/UB_data.csv', encoding="UTF-8", newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -115,11 +147,12 @@ class GracefulExit(SystemExit):
         self.code = code
 
 
-def sigint_handler():
+def sigint_handler(signum, frame):
     msg = "Ctrl-c was pressed. Do you really want to exit? y/n "
     print(msg, end="", flush=True)
     res = readchar.readchar().lower()
     if res == b'y':
+        os.remove("PUBTF_bot.lock")
         raise GracefulExit(code=0)
     print("", end="\r", flush=True)
     print(" " * len(msg), end="", flush=True)  # clear the printed line
@@ -128,5 +161,6 @@ def sigint_handler():
 
 signal.signal(signal.SIGINT, sigint_handler)
 bot.run()
+os.remove("PUBTF_bot.lock")
 
 # (It's possible improve a lot of stuff, but I'll leave it as it is)

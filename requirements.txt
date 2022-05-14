@@ -1,4 +1,5 @@
 tomli
-mcrcon
+factorio-rcon-py
 twitchio
 readchar
+psutil

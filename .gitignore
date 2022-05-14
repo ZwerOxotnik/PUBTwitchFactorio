@@ -142,3 +142,6 @@ cython_debug/
 *.csv
 !config-example.toml
 !UB_data-example.csv
+
+# Ignore lock files
+*.lock

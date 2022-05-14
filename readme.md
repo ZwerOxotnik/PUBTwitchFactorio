@@ -5,12 +5,13 @@
 
 Allows you to print Twitch messages in Factorio and send custom commands in Factorio, customizing them via [Useful book][Useful book]. Fully customizable.
 
-(Perhaps, I'm not going to develop it because there are issues with Python and TwitchIO etc. Also, I don't have enough followers etc. on Twitch to test some stuff like "rewards for points" etc.)
+(Perhaps, I'm not going to develop it because there are issues with Python and TwitchIO etc. Also, I don't have enough followers etc. on Twitch to test some stuff like "rewards for points" etc.)\
 (It might work not so stable on Windows sometimes)
 
 ## 🏁 Getting Started
 It is assumed that you have:
 - [**Useful book**][Useful book] - Factorio mod on the server
+- [**AARR**][AARR] - Factorio mod on the server (optional, not important atm)
 - [**Factorio**](https://www.factorio.com/download) or its headless server
 - [**Twitch**](https://twitch.tv/) account for your bot
 - [**Python 3.10**](https://www.python.org/) installed. (I didn't test it on any other version)
@@ -76,3 +77,4 @@ python main.py
 ```
 
 [Useful book]: https://mods.factorio.com/mod/useful_book
+[AARR]: https://mods.factorio.com/mod/AARR/downloads
