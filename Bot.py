@@ -26,12 +26,11 @@ class RCON(factorio_rcon.RCONClient):
 
 
 class Bot(commands.Bot):
+    mods = None
 
     def __init__(self, twitch_config: dict, rcon_config: dict, debug: bool):
         self.ub_commands = []
         self.rcon = RCON(rcon_config["host"], rcon_config["port"], rcon_config["password"])
-        self.rcon.connect()
-        self.get_mods()
         self.help_description = ""
         self.admin_help_description = ""
         self.debug = debug
@@ -107,7 +106,8 @@ class Bot(commands.Bot):
     def get_AARR_source(self):
         return self.rcon.send_command('/sc if remote.interfaces.AARR then remote.call("AARR", "getSource") end')
 
-    def get_mods(self):
+    def connect_to_rcon(self):
+        self.rcon.connect()
         message = self.rcon.send_command("/sc rcon.print(game.table_to_json(script.active_mods))")
         self.mods = json.loads(message)
 

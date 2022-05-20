@@ -90,32 +90,6 @@ if not twitch_config.get("token"):
 
 bot = Bot(twitch_config, rcon_config, debug)
 
-bot.check_mod("useful_book")
-bot.check_mod("AARR")
-AARR_source = bot.get_AARR_source()
-if factorio_config["twitch_messages"]:
-    prefix = None
-    if bot.mods.get("useful_book"):
-        prefix = '__useful_book__ RunRCONScript("Print Twitch message",'
-    elif AARR_source and AARR_source == "AARR":
-        prefix = '__AARR__ printTwitchMessage('
-    elif AARR_source and AARR_source == "level":
-        prefix = 'printTwitchMessage('
-    if prefix:
-        @bot.event()
-        async def event_message(ctx):
-            # 'Runs every time a message is sent in chat.'
-            if ctx.author is None:
-                return
-            bot.rcon.send_command(f'/sc {prefix}"{ctx.author.name}","{ctx.content}")')
-    else:
-        @bot.event()
-        async def event_message(ctx):
-            # 'Runs every time a message is sent in chat.'
-            if ctx.author is None:
-                return
-            bot.rcon.send_command(f'/sc game.print({"", "[color=purple][Twitch][/color] ", {ctx.author.name}, {"colon"}, " ", {ctx.content}})')
-
 if bot.mods.get("useful_book"):
     with open('configs/UB_data.csv', encoding="UTF-8", newline='') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -160,6 +134,34 @@ def sigint_handler(signum, frame):
 
 
 signal.signal(signal.SIGINT, sigint_handler)
+bot.connect_to_rcon()
+
+bot.check_mod("useful_book")
+bot.check_mod("AARR")
+AARR_source = bot.get_AARR_source()
+if factorio_config["twitch_messages"]:
+    prefix = None
+    if bot.mods.get("useful_book"):
+        prefix = '__useful_book__ RunRCONScript("Print Twitch message",'
+    elif AARR_source and AARR_source == "AARR":
+        prefix = '__AARR__ printTwitchMessage('
+    elif AARR_source and AARR_source == "level":
+        prefix = 'printTwitchMessage('
+    if prefix:
+        @bot.event()
+        async def event_message(ctx):
+            # 'Runs every time a message is sent in chat.'
+            if ctx.author is None:
+                return
+            bot.rcon.send_command(f'/sc {prefix}"{ctx.author.name}","{ctx.content}")')
+    else:
+        @bot.event()
+        async def event_message(ctx):
+            # 'Runs every time a message is sent in chat.'
+            if ctx.author is None:
+                return
+            bot.rcon.send_command(f'/sc game.print({"", "[color=purple][Twitch][/color] ", {ctx.author.name}, {"colon"}, " ", {ctx.content}})')
+
 bot.run()
 os.remove("PUBTF_bot.lock")
 
