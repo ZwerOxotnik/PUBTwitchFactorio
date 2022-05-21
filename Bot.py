@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 import json
@@ -22,6 +23,7 @@ class RCON(factorio_rcon.RCONClient):
             finally:
                 time.sleep(5)
         if has_errors:
+            os.remove("PUBTF_bot.lock")  # TODO: improve
             sys.exit("No connection with rcon")
 
 
