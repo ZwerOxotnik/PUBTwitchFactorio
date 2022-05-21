@@ -27,6 +27,7 @@ def lock(filename: str):
         except ValueError:
             pass
         pidfile.write(str(pid))
+        os.system(f"attrib +h {filename}")
     else:
         pidfile.write(str(os.getpid()))
     pidfile.close()
